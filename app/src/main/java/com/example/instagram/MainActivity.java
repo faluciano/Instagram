@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnPicture;
     private ImageView ivPicture;
     private Button btnSubmit;
+    private Button btnLogout;
     private File photoFile;
     public String photoFileName = "photo.jpg";
 
@@ -46,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
         btnPicture = findViewById(R.id.btnPicture);
         ivPicture = findViewById(R.id.ivPicture);
         btnSubmit = findViewById(R.id.btnSubmit);
+        btnLogout = findViewById(R.id.btnLogout);
+
+        btnLogout.setOnClickListener(v -> {
+            ParseUser.logOut();
+            finish();
+        });
 
         btnPicture.setOnClickListener(v->{
             launchCamera();

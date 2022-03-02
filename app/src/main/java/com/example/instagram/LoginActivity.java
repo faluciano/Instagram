@@ -13,6 +13,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText etPassword;
     TextInputEditText etUsername;
     Button btnLogin;
+    Button btnSignup;
 
 
     @Override
@@ -35,12 +37,40 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        btnSignup = findViewById(R.id.btnSignup);
 
         btnLogin.setOnClickListener(view -> {
             Log.i(TAG,"onClick login button");
             String username = etUsername.getText().toString();
             String password = etPassword.getText().toString();
             longUser(username,password);
+        });
+
+        btnSignup.setOnClickListener(v -> {
+            Log.i(TAG,"onClick signup button");
+            String username = etUsername.getText().toString();
+            String password = etPassword.getText().toString();
+            signupUser(username,password);
+        });
+    }
+
+    private void signupUser(String username, String password) {
+        Log.i(TAG,"Signing up user");
+        ParseUser user = new ParseUser();
+        user.setUsername(username);
+        user.setPassword(password);
+
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null){
+                    Log.e(TAG,"Could not Sign up",e);
+                    return;
+                }
+                etPassword.setText("");
+                goMainActivity();
+                Toast.makeText(LoginActivity.this,"Success!",Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -53,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e(TAG,"Error on login",e);
                     return;
                 }
+                etPassword.setText("");
                 goMainActivity();
                 Toast.makeText(LoginActivity.this,"Success!",Toast.LENGTH_SHORT).show();
             }
@@ -62,6 +93,6 @@ public class LoginActivity extends AppCompatActivity {
     private void goMainActivity() {
         Intent i = new Intent(this,MainActivity.class);
         startActivity(i);
-        finish();
+//        finish();
     }
 }
