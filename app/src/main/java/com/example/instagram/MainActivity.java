@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 Log.i(TAG,"saved post");
+                Toast.makeText(MainActivity.this,"Post saved",Toast.LENGTH_SHORT).show();
                 etDescription.setText("");
                 ivPicture.setImageResource(0);
             }
