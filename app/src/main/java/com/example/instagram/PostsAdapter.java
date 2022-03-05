@@ -1,7 +1,6 @@
 package com.example.instagram;
 
 import android.content.Context;
-import android.gesture.GestureLibraries;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +38,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.bind(post);
+    }
+
+    public void clear(){
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Post> posts){
+        this.posts.addAll(posts);
+        notifyDataSetChanged();
     }
 
     @Override
