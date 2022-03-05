@@ -36,7 +36,7 @@ import java.io.File;
 import java.util.List;
 
 public class ComposeFragment extends Fragment {
-    public static final String TAG = "Compose Fragment";
+    public static final String TAG = "ComposeFragment";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE= 42;
     private EditText etDescription;
     private Button btnPicture;
@@ -156,20 +156,5 @@ public class ComposeFragment extends Fragment {
         });
     }
 
-    private void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e!=null){
-                    Log.e(TAG,"Query wrong",e);
-                    return;
-                }
-                for(Post post : posts){
-                    Log.i(TAG,"Post: "+post.getDescription()+", username: "+post.getUser().getUsername());
-                }
-            }
-        });
-    }
+
 }
