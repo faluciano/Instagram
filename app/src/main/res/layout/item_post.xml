@@ -45,11 +45,25 @@
     </TableRow>
 
     <TextView
+        android:id="@+id/tvLikes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0 likes" />
+
+    <TextView
         android:id="@+id/tvDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Post Description"
-        android:layout_marginBottom="10dp"/>
+        />
 
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Posted 11/18"
+        android:textSize="11sp"
+        android:textStyle="italic" />
 
 </LinearLayout>
