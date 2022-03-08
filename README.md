@@ -15,7 +15,7 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 - [x] User sees app icon in home screen and styled bottom navigation view
-- [ ] Style the feed to look like the real Instagram feed.
+- [x] Style the feed to look like the real Instagram feed.
 - [ ] User can load more posts once he or she reaches the bottom of the feed using infinite scrolling.
 - [ ] Show the username and creation time for each post.
 - [ ] User can tap a post to view post details, including timestamp and caption.

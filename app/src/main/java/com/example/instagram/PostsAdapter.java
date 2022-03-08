@@ -1,6 +1,7 @@
 package com.example.instagram;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,9 +70,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
         public void bind(Post post) {
-            Log.i(TAG,post.getUser().getUsername());
-            tvDescription.setText(post.getDescription());
-            tvUsername.setText(post.getUser().getUsername());
+            String username = post.getUser().getUsername();
+            tvDescription.setText(Html.fromHtml("<b>@" + username + "</b> "+post.getDescription()));
+            tvUsername.setText(username);
             ParseFile image = post.getImage();
             if (image != null ){
                 Glide.with(context)
