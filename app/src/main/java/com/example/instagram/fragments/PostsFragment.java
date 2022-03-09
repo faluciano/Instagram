@@ -31,6 +31,8 @@ public class PostsFragment extends Fragment {
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
     protected SwipeRefreshLayout swipeContainer;
+    protected boolean loading = true;
+    int pastVisibleItems,visibleItemCount,totalItemcount;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -48,16 +50,36 @@ public class PostsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rvPosts = view.findViewById(R.id.rvPosts);
         swipeContainer = view.findViewById(R.id.swipeContainer);
+
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(getContext(),allPosts);
-
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager postLayoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(postLayoutManager);
         queryPosts();
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+        swipeContainer.setOnRefreshListener(() -> {
+            adapter.clear();
+            totalItemcount = 0;
+            loading = false;
+            queryPosts();
+        });
+
+        rvPosts.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onRefresh() {
-                queryPosts();
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if(dy > 0){
+                    visibleItemCount = postLayoutManager.getChildCount();
+                    totalItemcount = postLayoutManager.getItemCount();
+                    pastVisibleItems = postLayoutManager.findFirstCompletelyVisibleItemPosition();
+
+                    if(loading){
+                        if((visibleItemCount+pastVisibleItems)>=totalItemcount){
+                            loading = false;
+                            queryPosts();
+                        }
+                    }
+                }
             }
         });
     }
@@ -66,20 +88,22 @@ public class PostsFragment extends Fragment {
         query.include(Post.KEY_USER);
         query.setLimit(20);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e!=null){
-                    Log.e(TAG,"Query wrong",e);
-                    return;
-                }
-                for(Post post : posts){
-                    Log.i(TAG,"Post: "+post.getDescription()+", username: "+post.getUser().getUsername());
-                }
-                swipeContainer.setRefreshing(false);
-                adapter.clear();
-                adapter.addAll(posts);
+        query.setSkip(totalItemcount);
+        query.findInBackground((posts, e) -> {
+            if (e!=null){
+                Log.e(TAG,"Query wrong",e);
+                return;
             }
+            for(Post post : posts){
+                Log.i(TAG,"Post: "+post.getDescription()+", username: "+post.getUser().getUsername());
+            }
+            swipeContainer.setRefreshing(false);
+            if(loading){
+                Log.i(TAG,"posts cleared");
+                adapter.clear();
+            }
+            adapter.addAll(posts);
+            loading = true;
         });
     }
 }

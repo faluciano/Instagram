@@ -1,6 +1,7 @@
 package com.example.instagram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,6 +73,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivLike;
         private TextView tvLikes;
         private TextView tvDate;
+        private ImageView ivComment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +83,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivLike = itemView.findViewById(R.id.ivLike);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvDate = itemView.findViewById(R.id.tvDate);
+            ivComment = itemView.findViewById(R.id.ivComment);
         }
 
         public void bind(Post post) {
@@ -131,9 +134,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     ivLike.setImageResource(R.drawable.ufi_heart_active);
                     ivLike.setOnClickListener(null);
                 }
+                else{
+                    ivLike.setImageResource(R.drawable.ufi_heart);
+                }
             } catch (ParseException parseException){
                 parseException.printStackTrace();
             }
+
+            ivComment.setOnClickListener(v->{
+                Intent i = new Intent(context, CommentActivity.class);
+                i.putExtra("id",post.getObjectId());
+                context.startActivity(i);
+            });
+
         }
     }
 }
